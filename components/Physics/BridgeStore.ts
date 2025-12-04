@@ -1,4 +1,3 @@
-
 import { create } from 'zustand';
 import { MaterialType, MATERIALS } from './Materials';
 
@@ -57,6 +56,7 @@ interface BridgeState {
 // Initial Level Config (Constants from TDD)
 export const LEVEL_CONSTANTS = {
   WORLD_WIDTH: 2400,
+  WORLD_HEIGHT: 2000,
   CLIFF_Y: 800,
   CLIFF_WIDTH: 400,
   GAP_WIDTH: 1600,

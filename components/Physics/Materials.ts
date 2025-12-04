@@ -3,12 +3,15 @@ export interface MaterialType {
   id: string;
   name: string;
   color: string;
-  renderColor: string; // Hex for canvas rendering
+  renderColor: string; // Hex for canvas rendering (legacy/fallback)
   strength: number; // Max strain (pixels) before breaking
   stiffness: number; // 0-1 (1 is rigid)
   density: number; // For weight calculation
   cost: number;
   type: 'road' | 'support' | 'cable';
+  // 3D Properties
+  metalness: number;
+  roughness: number;
 }
 
 export const MATERIALS: Record<string, MaterialType> = {
@@ -21,7 +24,9 @@ export const MATERIALS: Record<string, MaterialType> = {
     stiffness: 1, 
     density: 0.005, // Heavy
     cost: 50,
-    type: 'road'
+    type: 'road',
+    metalness: 0.1,
+    roughness: 0.9
   },
   WOOD: { 
     id: 'wood', 
@@ -32,7 +37,9 @@ export const MATERIALS: Record<string, MaterialType> = {
     stiffness: 0.9, 
     density: 0.001, // Light
     cost: 15,
-    type: 'support'
+    type: 'support',
+    metalness: 0.0,
+    roughness: 0.8
   },
   STEEL: { 
     id: 'steel', 
@@ -43,7 +50,9 @@ export const MATERIALS: Record<string, MaterialType> = {
     stiffness: 0.99, 
     density: 0.002, 
     cost: 40,
-    type: 'support'
+    type: 'support',
+    metalness: 0.8,
+    roughness: 0.2
   },
   CABLE: { 
     id: 'cable', 
@@ -54,6 +63,8 @@ export const MATERIALS: Record<string, MaterialType> = {
     stiffness: 0.5, // Flexible
     density: 0.001,
     cost: 30,
-    type: 'cable'
+    type: 'cable',
+    metalness: 0.5,
+    roughness: 0.5
   },
 };

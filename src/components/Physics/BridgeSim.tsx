@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, Suspense } from 'react';
 import Matter from 'matter-js';
 import * as THREE from 'three';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Environment, Sphere, Plane, useCursor } from '@react-three/drei';
+import { OrbitControls, Environment, Sphere, Plane, useCursor, useGLTF, Box } from '@react-three/drei';
 import { MATERIALS, MaterialType } from './Materials';
 import { useBridgeStore, LEVEL_CONSTANTS, PNode, PEdge } from './BridgeStore';
 import { Play, RotateCcw, Hammer, ArrowLeft, Eraser, MousePointer2, Move, CircleDot } from 'lucide-react';
@@ -12,7 +12,6 @@ import { UserProfile } from '../../types';
 import TerrainMesh from './Bridge3D/TerrainMesh';
 import BridgeBeam from './Bridge3D/BridgeBeam';
 import PhysicsSync from './Bridge3D/PhysicsSync';
-import BridgeModel from './Bridge3D/BridgeModel';
 import createCar from './Engine/createCar';
 import checkBreakage from './Engine/checkBreakage';
 
@@ -30,7 +29,8 @@ const NODE_RADIUS = 6;
 // --- ASSET COMPONENTS ---
 
 const Car3D = ({ engine }: { engine: Matter.Engine }) => {
-    // Procedural Car implementation (Fallback if GLB missing)
+    const chassisGltf = useGLTF('/models/truck_chassis.glb');
+    const wheelGltf = useGLTF('/models/wheel.glb');
     const [bodies, setBodies] = useState<{chassis: Matter.Body, wheels: Matter.Body[]} | null>(null);
 
     useFrame(() => {
@@ -50,36 +50,12 @@ const Car3D = ({ engine }: { engine: Matter.Engine }) => {
 
     return (
         <group>
-            {/* Chassis */}
-            <PhysicsSync matterBody={bodies.chassis}> 
-                <mesh>
-                    <boxGeometry args={[120, 30, 40]} />
-                    <meshStandardMaterial color="#e74c3c" metalness={0.6} roughness={0.4} />
-                    {/* Cabin detail */}
-                    <mesh position={[30, 20, 0]}>
-                        <boxGeometry args={[40, 20, 38]} />
-                        <meshStandardMaterial color="#c0392b" />
-                    </mesh>
-                    {/* Windshield */}
-                    <mesh position={[40, 20, 0]}>
-                        <boxGeometry args={[22, 18, 40]} />
-                        <meshStandardMaterial color="#87CEEB" metalness={0.9} roughness={0.1} />
-                    </mesh>
-                </mesh>
+            <PhysicsSync matterBody={bodies.chassis} offset={[0, -5, 0]}> 
+                <primitive object={chassisGltf.scene.clone()} scale={[22, 22, 22]} rotation={[0, Math.PI/2, 0]} />
             </PhysicsSync>
-
-            {/* Wheels */}
             {bodies.wheels.map((wheel, i) => (
                 <PhysicsSync key={wheel.id} matterBody={wheel}>
-                    <mesh rotation={[Math.PI/2, 0, 0]}>
-                        <cylinderGeometry args={[12, 12, 10, 16]} />
-                        <meshStandardMaterial color="#1e293b" />
-                        {/* Rim detail */}
-                        <mesh position={[0, 0.1, 0]}>
-                            <cylinderGeometry args={[6, 6, 11, 8]} />
-                            <meshStandardMaterial color="#94a3b8" />
-                        </mesh>
-                    </mesh>
+                    <primitive object={wheelGltf.scene.clone()} scale={[22, 22, 22]} rotation={[0, Math.PI/2, 0]} />
                 </PhysicsSync>
             ))}
         </group>
@@ -135,9 +111,20 @@ const PreviewLine = ({ startRef, endRef, color }: { startRef: React.MutableRefOb
 
 // --- PROJECTOR FOR SPLASH VFX ---
 const VfxProjector = ({ engineRef }: { engineRef: React.MutableRefObject<Matter.Engine | null> }) => {
-    // This component helps map 3D events to screen space if needed, 
-    // currently splash is handled by simple screen center fallback 
-    // or we can implement full projection here.
+    const { camera } = useThree();
+    const lastY = useRef<number>(0);
+
+    useFrame(() => {
+        if (!engineRef.current) return;
+        const chassis = Matter.Composite.allBodies(engineRef.current.world).find(b => b.label === 'CarChassis');
+        if (chassis) {
+            // Logic to detect water entry mostly happens in game hook, 
+            // but we can help project coordinates here if needed.
+            // Simplified: The triggerSplash is called from the logic loop with screen coords? 
+            // Actually better to handle splash triggering via the outcome hook or main loop.
+            // This component is kept if we need 3D->2D projection logic for VFX later.
+        }
+    });
     return null;
 }
 
@@ -265,7 +252,7 @@ const BridgeSim = ({ onBack, user }: { onBack: () => void, user?: UserProfile })
                 } else {
                     playSfx('break');
                     playSfx('splash');
-                    // Simple screen center splash for now
+                    // Simple screen center splash for now, or use projected coords
                     triggerSplash(window.innerWidth / 2, window.innerHeight / 2);
                 }
                 
@@ -343,7 +330,7 @@ const BridgeSim = ({ onBack, user }: { onBack: () => void, user?: UserProfile })
       <WinLossOverlay 
         outcome={outcome} 
         onRetry={() => { setSimulationState('design'); setOutcome(null); }} 
-        onSave={() => Promise.resolve()} 
+        onSave={() => Promise.resolve()} // Placeholder until save is fully wired to user
       />
 
       <div className="h-14 border-b border-white/10 flex items-center justify-between px-6 bg-[#0F172A] z-20 flex-none">
@@ -407,7 +394,6 @@ const BridgeSim = ({ onBack, user }: { onBack: () => void, user?: UserProfile })
             <InteractionPlane onInteract={handleInteract} onMove={(pt) => currentCursorPos.current.copy(pt)} />
             <Suspense fallback={null}>
                 <TerrainMesh />
-                <BridgeModel />
                 {simulationState === 'running' && <Car3D engine={engineRef.current} />}
             </Suspense>
             <group>
