@@ -29,9 +29,11 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps> = ({ user, onNavigate }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [currentView, setCurrentView] = useState<'overview' | 'subjects' | 'community' | 'settings'>('overview');
-  
+
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
     onNavigate('home');
   };
 
