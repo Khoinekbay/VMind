@@ -25,3 +25,14 @@ View your app in AI Studio: https://ai.studio/apps/drive/1G5bkBj4v5cxBlymHWGAGr0
 ## Testing / Build
 
 To verify the bundle, run `npm run build`. This requires access to the npm registry to download `three`, `@react-three/drei`, and other client rendering dependencies.
+
+## Push changes to GitHub / open a PR
+
+If you are developing locally and need to publish your branch to GitHub before opening a pull request:
+
+1. Verify you are on the correct branch: `git status -sb`.
+2. Add and commit your changes: `git add . && git commit -m "your message"`.
+3. Push to the remote (replace `branch-name` with your branch): `git push origin branch-name`.
+4. Open a pull request from that branch in the GitHub UI.
+
+If `git push origin branch-name` fails, make sure the remote is set (`git remote -v`) and that you have permission to push to the repository.
