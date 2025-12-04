@@ -1,6 +1,6 @@
 import { useRef, useCallback } from 'react';
 import Matter from 'matter-js';
-import { useBridgeStore } from '../components/Physics/BridgeStore';
+import { useBridgeStore } from '@/components/Physics/BridgeStore';
 
 interface UseGameOutcomeProps {
   engineRef: React.MutableRefObject<Matter.Engine | null>;

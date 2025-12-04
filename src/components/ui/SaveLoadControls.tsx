@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Save, FolderOpen, CloudUpload, Check, Loader2 } from 'lucide-react';
-import { useBridgeStore } from '../Physics/BridgeStore';
+import { useBridgeStore } from '@/components/Physics/BridgeStore';
 import { saveToLocal, loadFromLocal, saveToCloud } from '../../lib/persistence';
 
 interface SaveLoadControlsProps {
