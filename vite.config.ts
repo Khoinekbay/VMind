@@ -8,6 +8,9 @@ export default defineConfig(({ mode }) => {
       // Use a relative base so the SPA still loads when hosted under a subpath
       // (e.g., GitHub Pages), preventing blank screens from missing /assets URLs.
       base: './',
+      // Honor both Vite and Next-style prefixes so NEXT_PUBLIC_* values set on
+      // Vercel get injected into the client bundle (needed for Supabase).
+      envPrefix: ['VITE_', 'NEXT_PUBLIC_'],
       server: {
         port: 3000,
         host: '0.0.0.0',
