@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { supabase } from '@/lib/supabase';
 
 const LOCAL_STORAGE_PREFIX = 'v-mind_sim_';
 

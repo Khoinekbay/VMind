@@ -18,3 +18,7 @@ View your app in AI Studio: https://ai.studio/apps/drive/1G5bkBj4v5cxBlymHWGAGr0
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+## Testing / Build
+
+To verify the bundle, run `npm run build`. This requires access to the npm registry to download `three`, `@react-three/drei`, and other client rendering dependencies.
