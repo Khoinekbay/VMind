@@ -16,13 +16,13 @@ import BridgeModel from './Bridge3D/BridgeModel';
 import createCar from './Engine/createCar';
 import checkBreakage from './Engine/checkBreakage';
 
-// New Imports
-import WinLossOverlay from '../ui/WinLossOverlay';
-import SaveLoadControls from '../ui/SaveLoadControls';
-import FireworksCanvas, { triggerFireworks } from '../vfx/FireworksCanvas';
-import SplashParticles, { triggerSplash } from '../vfx/SplashParticles';
-import { useSfx } from '../../hooks/useSfx';
-import { useGameOutcome } from '../../hooks/useGameOutcome';
+// New Imports (point directly to src assets to avoid missing module resolution)
+import WinLossOverlay from '@/src/components/ui/WinLossOverlay';
+import SaveLoadControls from '@/src/components/ui/SaveLoadControls';
+import FireworksCanvas, { triggerFireworks } from '@/src/components/vfx/FireworksCanvas';
+import SplashParticles, { triggerSplash } from '@/src/components/vfx/SplashParticles';
+import { useSfx } from '@/src/hooks/useSfx';
+import { useGameOutcome } from '@/src/hooks/useGameOutcome';
 
 const MAX_BEAM_LENGTH = 300; 
 const NODE_RADIUS = 6; 
