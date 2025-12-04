@@ -16,13 +16,13 @@ import BridgeModel from './Bridge3D/BridgeModel';
 import createCar from './Engine/createCar';
 import checkBreakage from './Engine/checkBreakage';
 
-// New Imports
+// New Imports (use local compatibility shims to avoid path resolution issues)
 import WinLossOverlay from '../ui/WinLossOverlay';
 import SaveLoadControls from '../ui/SaveLoadControls';
 import FireworksCanvas, { triggerFireworks } from '../vfx/FireworksCanvas';
 import SplashParticles, { triggerSplash } from '../vfx/SplashParticles';
-import { useSfx } from '../../hooks/useSfx';
-import { useGameOutcome } from '../../hooks/useGameOutcome';
+import { useSfx } from '../../src/hooks/useSfx';
+import { useGameOutcome } from '../../src/hooks/useGameOutcome';
 
 const MAX_BEAM_LENGTH = 300; 
 const NODE_RADIUS = 6; 

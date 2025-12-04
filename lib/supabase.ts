@@ -1,6 +1,18 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://gbsnriqieystfsjeubeu.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdic25yaXFpZXlzdGZzamV1YmV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2NTU4MjAsImV4cCI6MjA4MDIzMTgyMH0.rTg0cuGqsYG9x2UMNhoL5tX4mxE_5P3Gk3UwVyIJlm8';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+
+let supabaseClient: SupabaseClient | null = null;
+
+if (isSupabaseConfigured) {
+  supabaseClient = createClient(supabaseUrl!, supabaseAnonKey!);
+} else {
+  console.warn(
+    'Supabase environment variables are missing. Auth features are disabled until VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set.'
+  );
+}
+
+export const supabase = supabaseClient;

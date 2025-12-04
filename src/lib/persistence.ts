@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 const LOCAL_STORAGE_PREFIX = 'v-mind_sim_';
 
@@ -32,6 +32,10 @@ export const loadFromLocal = (key: string): SaveData | null => {
 };
 
 export const saveToCloud = async (userId: string, simulationId: string, data: any) => {
+  if (!supabase || !isSupabaseConfigured) {
+    console.warn('Supabase chưa được cấu hình - bỏ qua lưu đám mây');
+    return;
+  }
   // Uses the user_progress table defined in migration 001
   const { error } = await supabase
     .from('user_progress')
@@ -46,6 +50,10 @@ export const saveToCloud = async (userId: string, simulationId: string, data: an
 };
 
 export const loadFromCloud = async (userId: string, simulationId: string) => {
+  if (!supabase || !isSupabaseConfigured) {
+    console.warn('Supabase chưa được cấu hình - bỏ qua tải đám mây');
+    return null;
+  }
   const { data, error } = await supabase
     .from('user_progress')
     .select('progress')

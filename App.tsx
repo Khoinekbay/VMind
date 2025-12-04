@@ -9,7 +9,7 @@ import Dashboard from './components/Dashboard';
 import PhysicsDashboard from './components/Physics/PhysicsDashboard';
 import BridgeSim from './components/Physics/BridgeSim';
 import { LayoutTemplate, Loader2 } from 'lucide-react';
-import { supabase } from './lib/supabase';
+import { supabase, isSupabaseConfigured } from './lib/supabase';
 import { UserProfile } from './types';
 
 type Page = 'home' | 'features' | 'about' | 'login' | 'register' | 'dashboard' | 'physics' | 'physics-bridge';
@@ -20,6 +20,7 @@ export default function App() {
   const [user, setUser] = useState<UserProfile | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState<Theme>('light');
+  const showSupabaseWarning = !isSupabaseConfigured;
 
   // Initialize Theme
   useEffect(() => {
@@ -47,6 +48,11 @@ export default function App() {
   };
 
   useEffect(() => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
     // Check active session
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
@@ -70,6 +76,8 @@ export default function App() {
   }, []);
 
   const fetchUserProfile = async (userId: string) => {
+    if (!supabase) return;
+
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -141,6 +149,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-cyber-black text-slate-900 dark:text-gray-100 flex flex-col font-sans selection:bg-brand-100 selection:text-brand-900 dark:selection:bg-cyber-neon dark:selection:text-cyber-black transition-colors duration-300">
+      {/* Supabase config warning */}
+      {showSupabaseWarning && (
+        <div className="bg-amber-50 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200 px-4 py-3 text-sm text-center border-b border-amber-200 dark:border-amber-800">
+          Supabase chưa được cấu hình. Các tính năng đăng nhập/lưu đám mây sẽ bị tắt cho tới khi thêm VITE_SUPABASE_URL và VITE_SUPABASE_ANON_KEY.
+        </div>
+      )}
+
       {/* Navbar - Only show if not in dashboard or immersive mode */}
       {!isDashboard && !isImmersive && (
         <Navbar 

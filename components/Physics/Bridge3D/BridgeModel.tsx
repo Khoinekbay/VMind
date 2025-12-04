@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useGLTF } from '@react-three/drei';
 
-const DEFAULT_MODEL_PATH = '/models/custom_bridge.glb';
+// Custom bridge models should be placed in `public/bridge-models`.
+// A default sample lives at `/bridge-models/custom_bridge.gltf`.
+const DEFAULT_MODEL_PATH = '/bridge-models/custom_bridge.gltf';
 const LEVEL_OFFSET = 300;
 
 type BridgeModelProps = {

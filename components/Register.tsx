@@ -9,11 +9,18 @@ interface RegisterProps {
 const Register: React.FC<RegisterProps> = ({ onNavigate }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const supabaseReady = Boolean(supabase);
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    if (!supabase) {
+      setError('Supabase chưa được cấu hình. Hãy thêm VITE_SUPABASE_URL và VITE_SUPABASE_ANON_KEY để bật đăng ký.');
+      setLoading(false);
+      return;
+    }
 
     const formData = new FormData(e.currentTarget);
     const username = formData.get('username') as string;
@@ -63,6 +70,10 @@ const Register: React.FC<RegisterProps> = ({ onNavigate }) => {
   };
 
   const handleSocialLogin = async (provider: 'google' | 'github') => {
+    if (!supabase) {
+      setError('Supabase chưa được cấu hình.');
+      return;
+    }
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
@@ -186,7 +197,7 @@ const Register: React.FC<RegisterProps> = ({ onNavigate }) => {
           <div>
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !supabaseReady}
               className="group relative flex w-full justify-center rounded-xl bg-brand-600 dark:bg-brand-700 px-4 py-3 text-sm font-bold text-white hover:bg-brand-700 dark:hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition-all shadow-lg shadow-brand-500/30 disabled:opacity-70 disabled:cursor-not-allowed font-sans"
             >
               <span className="absolute inset-y-0 left-0 flex items-center pl-3">

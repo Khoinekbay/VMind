@@ -21,7 +21,9 @@ const Navbar: React.FC<NavbarProps> = ({ user, onNavigate, currentPage, theme, t
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
     onNavigate('home');
     setIsProfileOpen(false);
   };
