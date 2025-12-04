@@ -1,0 +1,16 @@
+/* Minimal global styles for static hosting builds */
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.dark body {
+  background: #0b1224;
+  color: #e2e8f0;
+}
