@@ -19,6 +19,8 @@ View your app in AI Studio: https://ai.studio/apps/drive/1G5bkBj4v5cxBlymHWGAGr0
 3. Add your Supabase credentials in [.env.local](.env.local):
    - `VITE_SUPABASE_URL`
    - `VITE_SUPABASE_ANON_KEY`
+   
+   **Vercel/Next-style variables are also accepted**: you can provide `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` instead of the Vite-prefixed names, and the app will pick them up automatically.
 4. Run the app:
    `npm run dev`
 

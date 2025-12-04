@@ -17,7 +17,7 @@ const Register: React.FC<RegisterProps> = ({ onNavigate }) => {
     setError(null);
 
     if (!supabase) {
-      setError('Supabase chưa được cấu hình. Hãy thêm VITE_SUPABASE_URL và VITE_SUPABASE_ANON_KEY để bật đăng ký.');
+      setError('Supabase chưa được cấu hình. Hãy thêm VITE_SUPABASE_URL/VITE_SUPABASE_ANON_KEY hoặc NEXT_PUBLIC_SUPABASE_URL/NEXT_PUBLIC_SUPABASE_ANON_KEY để bật đăng ký.');
       setLoading(false);
       return;
     }

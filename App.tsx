@@ -152,7 +152,7 @@ export default function App() {
       {/* Supabase config warning */}
       {showSupabaseWarning && (
         <div className="bg-amber-50 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200 px-4 py-3 text-sm text-center border-b border-amber-200 dark:border-amber-800">
-          Supabase chưa được cấu hình. Các tính năng đăng nhập/lưu đám mây sẽ bị tắt cho tới khi thêm VITE_SUPABASE_URL và VITE_SUPABASE_ANON_KEY.
+          Supabase chưa được cấu hình. Các tính năng đăng nhập/lưu đám mây sẽ bị tắt cho tới khi thêm VITE_SUPABASE_URL/VITE_SUPABASE_ANON_KEY hoặc NEXT_PUBLIC_SUPABASE_URL/NEXT_PUBLIC_SUPABASE_ANON_KEY.
         </div>
       )}
 
